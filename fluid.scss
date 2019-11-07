@@ -1,0 +1,26 @@
+@mixin fluid($selector, $properties) {
+  $viewport-lock-min: 20;
+  $viewport-lock-max: 80;
+  
+  #{$selector} {
+    @each $property-name, $property-values in $properties {
+      #{$property-name}: #{map-get($property-values, 'min')}rem;
+    }
+  }
+  
+  @media (min-width: #{$viewport-lock-min}em) {
+    #{$selector} {
+      @each $property-name, $property-values in $properties {
+        #{$property-name}: calc(#{map-get($property-values, 'min')}rem + (#{map-get($property-values, 'max')} - #{map-get($property-values, 'min')}) * (100vw - #{$viewport-lock-min}rem) / (#{$viewport-lock-max} - #{$viewport-lock-min}));
+      }
+    } 
+  }
+  
+  @media (min-width: #{$viewport-lock-max}em) {
+    #{$selector} {
+      @each $property-name, $property-values in $properties {
+        #{$property-name}: #{map-get($property-values, 'max')}rem;
+      }
+    }
+  }
+}
